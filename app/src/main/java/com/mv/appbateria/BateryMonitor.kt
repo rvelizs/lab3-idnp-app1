@@ -6,17 +6,12 @@ import android.content.Intent
 import android.os.BatteryManager
 import android.util.Log
 
-class BateryMonitor : BroadcastReceiver() {
-    var va: Int = 0
-    override fun onReceive(p0: Context?, intent: Intent?) {
+class BateryMonitor(private val onBatteryLevelChanged: (Int) -> Unit) : BroadcastReceiver() {
+
+    override fun onReceive(context: Context?, intent: Intent?) {
         val level = intent?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
-        Log.d("Batery Receiver", "nivel de batería: $level%")
-        va = level
-
+        Log.d("Batery Receiver", "Nivel de batería: $level%")
+        onBatteryLevelChanged(level) // Actualiza la interfaz de usuario directamente
+                                    // Llama al lambda para actualizar la interfaz
     }
-
-    fun getValue(): Int {
-        return va
-    }
-
 }

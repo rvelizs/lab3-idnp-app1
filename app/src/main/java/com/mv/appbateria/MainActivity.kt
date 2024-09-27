@@ -21,29 +21,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }*/
 
-        batteryReceiver = BateryMonitor()
+        batteryReceiver = BateryMonitor { batteryLevel ->
+            // Actualizar el TextView inmediatamente cuando se recibe el nivel de la batería
+            texto.text = "$batteryLevel%"
+        }
 
         val view: View
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         view = binding.getRoot();
         setContentView(view);
 
-        /*binding.btnUpdate.setOnClickListener {
-          val prueba = 1234
-            updateStatusBattery(prueba)
-        }*/
-
-
-
-         // Instancia del BroadcastReceiver
+        // Asigna el TextView para actualizar el valor
+        texto = binding.txtInfo1
     }
 
     override fun onResume() {
@@ -53,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         // Registrar el receptor con el filtro
         registerReceiver(batteryReceiver, intentFilter)
         Log.d("Aplicación","BroadcastReceiver registrado satisfactoriamente")
-        texto.text = batteryReceiver.getValue().toString()
+        //texto.text = batteryReceiver.getValue().toString()
     }
 
     override fun onPause() {
